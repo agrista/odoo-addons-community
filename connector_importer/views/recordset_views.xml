@@ -9,7 +9,6 @@
                 <group col="4" name="main">
                     <group colspan="2" name="base" string="Base configuration">
                         <field name="name" readonly="1" />
-                        <field name="backend_id" options="{'no_create': True}" required="1" />
                         <field name="import_type_id" options="{'no_create': True}" />
                         <field name="override_existing" />
                     </group>
@@ -83,7 +82,7 @@
     <record id="view_import_recordset_tree" model="ir.ui.view">
         <field name="model">import.recordset</field>
         <field name="arch" type="xml">
-            <tree string="import recordset">
+            <tree>
                 <field name="name" />
                 <field name="import_type_id" string="Type" />
                 <field name="override_existing" />

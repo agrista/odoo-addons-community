@@ -25,9 +25,7 @@ class ImportSource(models.AbstractModel):
     _reporter_model = ""
 
     name = fields.Char(compute="_compute_name")
-    chunk_size = fields.Integer(required=True,
-                                default=500,
-                                string="Chunks Size")
+    chunk_size = fields.Integer(required=True, default=500, string="Chunks Size")
     config_summary = fields.Html(compute="_compute_config_summary")
 
     # tmpl that renders configuration summary
@@ -61,9 +59,10 @@ class ImportSource(models.AbstractModel):
         just override `_config_summary_fields`.
         They'll be automatically included in the summary.
         """
+        tmpl_xid = self._config_summary_template
+        qweb = self.env["ir.qweb"].sudo()
         for item in self:
-            item.config_summary = self.env['ir.qweb']._render(
-                self._config_summary_template, item._config_summary_data())
+            item.config_summary = qweb._render(tmpl_xid, item._config_summary_data())
 
     def _config_summary_data(self):
         """Collect data for summary."""
@@ -73,14 +72,16 @@ class ImportSource(models.AbstractModel):
             "fields_info": self.fields_get(self._config_summary_fields),
         }
 
+    # TODO: check if still needed + use create multi
     @api.model
     def create(self, vals):
-        """Override to update reference to source on the consumer."""
         res = super().create(vals)
+        # Override to update reference to source on the consumer
         if self.env.context.get("active_model"):
             # update reference on consumer
             self.env[self.env.context["active_model"]].browse(
-                self.env.context["active_id"]).source_id = res.id
+                self.env.context["active_id"]
+            ).source_id = res.id
         return res
 
     def get_lines(self):
@@ -95,8 +96,7 @@ class ImportSource(models.AbstractModel):
         # no chunk size means no chunk of lines
         if not self.chunk_size:
             yield list(lines)
-        for _i, chunk in enumerate(
-                gen_chunks(lines_sorted, chunksize=self.chunk_size)):
+        for _i, chunk in enumerate(gen_chunks(lines_sorted, chunksize=self.chunk_size)):
             # get out of chunk iterator
             yield list(chunk)
 
@@ -110,9 +110,11 @@ class ImportSource(models.AbstractModel):
 
     def get_config_view_id(self):
         """Retrieve configuration view."""
-        return (self.env["ir.ui.view"].search([("model", "=", self._name),
-                                               ("type", "=", "form")],
-                                              limit=1).id)
+        return (
+            self.env["ir.ui.view"]
+            .search([("model", "=", self._name), ("type", "=", "form")], limit=1)
+            .id
+        )
 
     def get_reporter(self):
         """Retrieve a specific reporter for this source.

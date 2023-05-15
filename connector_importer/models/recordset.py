@@ -9,9 +9,11 @@ from collections import OrderedDict
 from odoo import api, fields, models
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
+from odoo.addons.component.utils import is_component_registry_ready
 from odoo.addons.queue_job.job import DONE, STATES
 
 from ..log import logger
+from ..utils.misc import get_importer_for_config
 
 
 class ImportRecordset(models.Model):
@@ -49,56 +51,46 @@ class ImportRecordset(models.Model):
     _backend_type = "import_backend"
 
     backend_id = fields.Many2one("import.backend", string="Import Backend")
-    sequence = fields.Integer("Sequence",
-                              help="Sequence for the handle.",
-                              default=10)
-    import_type_id = fields.Many2one(string="Import type",
-                                     comodel_name="import.type",
-                                     required=True)
+    sequence = fields.Integer(help="Sequence for the handle.", default=10)
+    import_type_id = fields.Many2one(
+        string="Import type", comodel_name="import.type", required=True
+    )
     override_existing = fields.Boolean(
         string="Override existing items",
         help="Enable to update existing items w/ new values. "
         "If disabled, matching records will be skipped.",
         default=True,
     )
-    name = fields.Char(string="Name", compute="_compute_name")
-    create_date = fields.Datetime("Create date")
-    record_ids = fields.One2many("import.record",
-                                 "recordset_id",
-                                 string="Records")
+    name = fields.Char(compute="_compute_name")
+    create_date = fields.Datetime()
+    record_ids = fields.One2many("import.record", "recordset_id", string="Records")
     # store info about imports report
     report_data = Serialized()
     shared_data = Serialized()
     report_html = fields.Html("Report summary", compute="_compute_report_html")
-    full_report_url = fields.Char("Full report url",
-                                  compute="_compute_full_report_url")
+    full_report_url = fields.Char(compute="_compute_full_report_url")
     jobs_global_state = fields.Selection(
-        string="Jobs global state",
         selection=[("no_job", "No job")] + STATES,
         default="no_job",
         compute="_compute_jobs_global_state",
-        help=("Tells you if a job is running for this recordset. "
-              "If any of the sub jobs is not DONE or FAILED "
-              "we assume the global state is PENDING."),
+        help=(
+            "Tells you if a job is running for this recordset. "
+            "If any of the sub jobs is not DONE or FAILED "
+            "we assume the global state is PENDING."
+        ),
     )
-    report_file = fields.Binary("Report file")
-    report_filename = fields.Char("Report filename")
+    report_file = fields.Binary()
+    report_filename = fields.Char()
     docs_html = fields.Html(string="Docs", compute="_compute_docs_html")
-    notes = fields.Html("Notes", help="Useful info for your users")
+    notes = fields.Html(help="Useful info for your users")
 
-    @api.depends("backend_id.name")
     def _compute_name(self):
         for item in self:
-            names = [
-                item.backend_id.name.strip() if item.backend_id else "",
-                "#" + str(item.id)
-            ]
-            item.name = " ".join(names)
+            item.name = f"#{item.id}"
 
     def get_records(self):
         """Retrieve importable records and keep ordering."""
-        return self.env["import.record"].search([("recordset_id", "=", self.id)
-                                                ])
+        return self.env["import.record"].search([("recordset_id", "=", self.id)])
 
     def _set_serialized(self, fname, values, reset=False):
         """Update serialized data."""
@@ -116,7 +108,7 @@ class ImportRecordset(models.Model):
         # In order to streamline this I invalidate cache right away so the
         # values are converted right away
         # TL/DR integer dict keys will always be converted to strings, beware
-        self.invalidate_model((fname,))
+        self.invalidate_recordset((fname,))
 
     def set_report(self, values, reset=False):
         """Update import report values."""
@@ -141,14 +133,15 @@ class ImportRecordset(models.Model):
         report_data = {}
         if start:
             report_data["_last_start"] = fields.Datetime.to_string(
-                fields.Datetime.now())
+                fields.Datetime.now()
+            )
         values = {
             "record_ids": [(5, 0, 0)],
             "report_data": report_data,
             "shared_data": {},
         }
         self.write(values)
-        self.invalidate_cache(tuple(values.keys()))
+        self.invalidate_recordset(tuple(values.keys()))
 
     def _get_report_html_data(self):
         """Prepare data for HTML report.
@@ -186,18 +179,17 @@ class ImportRecordset(models.Model):
 
     @api.depends("report_data")
     def _compute_report_html(self):
+        qweb = self.env["ir.qweb"].sudo()
         for item in self:
             item.report_html = False
             if not item.report_data:
                 continue
             data = item._get_report_html_data()
-            item.report_html = self.env['ir.qweb']._render(
-                "connector_importer.recordset_report", data)
+            item.report_html = qweb._render("connector_importer.recordset_report", data)
 
     def _compute_full_report_url(self):
         for item in self:
-            item.full_report_url = "/importer/import-recordset/{}".format(
-                item.id)
+            item.full_report_url = "/importer/import-recordset/{}".format(item.id)
 
     def debug_mode(self):
         return self.backend_id.debug_mode or os.getenv("IMPORTER_DEBUG_MODE")
@@ -234,7 +226,7 @@ class ImportRecordset(models.Model):
         """queue a job for creating records (import.record items)"""
         job_method = self.with_delay().import_recordset
         if self.debug_mode():
-            logger.warn("### DEBUG MODE ACTIVE: WILL NOT USE QUEUE ###")
+            logger.warning("### DEBUG MODE ACTIVE: WILL NOT USE QUEUE ###")
             job_method = self.import_recordset
 
         for item in self:
@@ -265,38 +257,44 @@ class ImportRecordset(models.Model):
             logger.debug("No reporter found...")
             return
         metadata, content = reporter.report_get(self)
-        self.write({
-            "report_file": base64.encodestring(content.encode()),
-            "report_filename": metadata["complete_filename"],
-        })
-        logger.info(("Report file updated on recordset={}. "
-                     "Filename: {}").format(self.id,
-                                            metadata["complete_filename"]))
+        self.write(
+            {
+                "report_file": base64.encodestring(content.encode()),
+                "report_filename": metadata["complete_filename"],
+            }
+        )
+        logger.info(
+            ("Report file updated on recordset={}. " "Filename: {}").format(
+                self.id, metadata["complete_filename"]
+            )
+        )
 
     def _get_importers(self):
         importers = OrderedDict()
         for importer_config in self.available_importers():
-            kwargs = {
-                "options": importer_config.options,
-            }
-            model = self.env["ir.model"]._get(importer_config.model)
-            with self.backend_id.with_context(
-                    **importer_config.context).work_on(self._name,
-                                                       **kwargs) as work:
-                importers[model] = work.component_by_name(
-                    importer_config.importer, model_name=importer_config.model)
+            model_record = self.env["ir.model"]._get(importer_config.model)
+            importers[model_record] = get_importer_for_config(
+                self.backend_id, self._name, importer_config
+            )
         return importers
 
     @api.depends("import_type_id")
     def _compute_docs_html(self):
+        if not is_component_registry_ready(self.env.cr.dbname):
+            # We cannot render anything if we cannot load components
+            self.docs_html = False
+            return
+        qweb = self.env["ir.qweb"].sudo()
         for item in self:
             item.docs_html = False
-            if isinstance(item.id, models.NewId):
+            if isinstance(item.id, models.NewId) or not item.backend_id:
+                # Surprise surprise: when editing a new recordset
+                # if you hit `configure source` btn
+                # the record will be saved but the backend can be null :S
                 continue
             importers = item._get_importers()
             data = {"recordset": item, "importers": importers}
-            item.docs_html = self.env['ir.qweb']._render(
-                "connector_importer.recordset_docs", data)
+            item.docs_html = qweb._render("connector_importer.recordset_docs", data)
 
 
 # TODO

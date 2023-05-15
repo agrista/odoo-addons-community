@@ -14,10 +14,10 @@ Connector Importer
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fconnector--interfaces-lightgray.png?logo=github
-    :target: https://github.com/OCA/connector-interfaces/tree/14.0/connector_importer
+    :target: https://github.com/OCA/connector-interfaces/tree/15.0/connector_importer
     :alt: OCA/connector-interfaces
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/connector-interfaces-14-0/connector-interfaces-14-0-connector_importer
+    :target: https://translation.odoo-community.org/projects/connector-interfaces-15-0/connector-interfaces-15-0-connector_importer
     :alt: Translate me on Weblate
 
 |badge1| |badge2| |badge3| |badge4| 
@@ -42,10 +42,9 @@ Known issues / Roadmap
 * refactor the `recordset.full_report_url` field to return a QWeb report
   instead of a home-made HTML document + display it on the recordset form.
 * move generic functions from `utils.mapper_utils` to the `connector` module
-* unit tests from `tests.test_source_csv` are not imported (Odoo ignores them)
-  and they need to be fixed
 * unit tests for record handler and tracker
-* rely on `self.work.options` in all components to replace all custom flags
+* add more test coverage for mapper utils and dynamic mapper
+* consider making dynamic mapper the default one
 
 Bug Tracker
 ===========
@@ -53,7 +52,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/connector-interfaces/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/connector-interfaces/issues/new?body=module:%20connector_importer%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/connector-interfaces/issues/new?body=module:%20connector_importer%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -98,6 +97,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-simahawk| 
 
-This module is part of the `OCA/connector-interfaces <https://github.com/OCA/connector-interfaces/tree/14.0/connector_importer>`_ project on GitHub.
+This module is part of the `OCA/connector-interfaces <https://github.com/OCA/connector-interfaces/tree/15.0/connector_importer>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
