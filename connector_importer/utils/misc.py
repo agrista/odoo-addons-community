@@ -25,7 +25,7 @@ def get_importer_for_config(backend, work_on_model, importer_config, **work_on_k
     with backend.with_context(**importer_config.context).work_on(
         importer_config.model, **work_on_kw
     ) as work:
-        importer_name = importer_config.importer.name
+        importer_name = importer_config.importer
         return work.component_by_name(importer_name)
 
 
