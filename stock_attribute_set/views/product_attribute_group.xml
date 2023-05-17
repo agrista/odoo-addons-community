@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="pim.attribute_group_form_action" model="ir.actions.act_window">
+        <field name="name">Product Attribute Groups</field>
+        <field
+            name="domain"
+            eval="[('model_id', '=', ref('product.model_product_template'))]"
+        />
+    </record>
+</odoo>

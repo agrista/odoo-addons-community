@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="product_category_form_view" model="ir.ui.view">
+        <field name="name">product.category.form.inherit.stock.attribute.set</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product_attribute_set.product_category_form_view" />
+        <field name="arch" type="xml">
+            <field name="attribute_set_id" position="after">
+                <field
+                    name="stock_attribute_set_id"
+                    context="{'default_model_id': %(stock.model_stock_move_line)d}"
+                    domain="[('model_id', '=', 'stock.move.line')]"
+                    class="oe_inline"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        action="stock_attribute_attribute_form_action"
+        id="menu_stock_attribute_attribute_action"
+        parent="pim.main_menu_attribute"
+        sequence="22"
+    />
+
+    <menuitem
+        action="stock_attribute_group_form_action"
+        id="menu_stock_attribute_group_action"
+        parent="pim.main_menu_attribute"
+        sequence="21"
+    />
+
+    <menuitem
+        action="stock_attribute_set_form_action"
+        id="menu_stock_attribute_set_action"
+        parent="pim.main_menu_attribute"
+        sequence="20"
+    />
+
+</odoo>
