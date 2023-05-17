@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.form.view.inherit.product.catch.weight</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='uom_po_id']" position="after">
+                <field name="tracking" invisible="1" />
+                <field name="catch_weight_uom_id"
+                        attrs="{'invisible': [('tracking', '=', 'none')]}"
+                        help="Leave empty to not use catch weight."/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
