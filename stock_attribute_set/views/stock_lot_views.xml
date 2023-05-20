@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_production_lot_form" model="ir.ui.view">
+        <field name="name">view.production.lot.form.inherit.stock.attribute.set</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='description']" position="after">
+                <page
+                        name="stock_lot_attributes"
+                        string="Attributes"
+                >
+                    <field name="attribute_set_id" invisible="1"/>
+                    <separator name="attributes_placeholder"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
