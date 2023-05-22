@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- agri.enterprise views -->
+
+    <record id="agri_enterprise_view_search"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.view.search</field>
+        <field name="model">agri.enterprise</field>
+        <field name="arch"
+               type="xml">
+            <search string="Enterprise">
+                <field name="name"/>
+                <field name="line_ids"/>
+                <separator/>
+                <group expand="0"
+                       string="Group By">
+                    <filter string="Type"
+                            name="group_type"
+                            context="{'group_by': 'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="agri_enterprise_view_tree"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.view.tree</field>
+        <field name="model">agri.enterprise</field>
+        <field name="priority">10</field>
+        <field name="arch"
+               type="xml">
+            <tree string="Enterprises">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="calendar_period_type"/>
+                <field name="cycle"/>
+                <field name="season_start"/>
+                <field name="season_end"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="agri_enterprise_view_form"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.view.form</field>
+        <field name="model">agri.enterprise</field>
+        <field name="priority">10</field>
+        <field name="arch"
+               type="xml">
+            <form string="Enterprises">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"
+                               class="oe_edit_only"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="type"/>
+                        <field name="calendar_period_type"/>
+                        <field name="cycle"/>
+                        <field name="season_start"/>
+                        <field name="season_end"/>
+                    </group>
+                    <notebook>
+                        <page string="Categories"
+                              name="lines_tab">
+                            <field name="line_ids"
+                                   nolabel="0"/>
+                        </page>
+                        <page string="Stages"
+                              name="stages_tab">
+                            <field name="stage_ids"
+                                   nolabel="0"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="agri_enterprise_action"
+            model="ir.actions.act_window">
+        <field name="name">Enterprises</field>
+        <field name="res_model">agri.enterprise</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help"
+               type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an enterprise
+            </p>
+        </field>
+    </record>
+
+    <!-- agri.enterprise.line views -->
+
+    <record id="agri_enterprise_line_view_tree"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.line.view.tree</field>
+        <field name="model">agri.enterprise.line</field>
+        <field name="priority">10</field>
+        <field name="arch"
+               type="xml">
+            <tree string="Lines" editable="bottom">
+                <field name="product_category_id"/>
+                <field name="cost_type"/>
+                <field name="sale_ok"/>
+                <field name="purchase_ok"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="agri_enterprise_line_view_form"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.line.view.form</field>
+        <field name="model">agri.enterprise.line</field>
+        <field name="priority">10</field>
+        <field name="arch"
+               type="xml">
+            <form string="Lines">
+                <sheet>
+                    <field name="product_category_id"/>
+                    <field name="cost_type"/>
+                    <field name="sale_ok"/>
+                    <field name="purchase_ok"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- agri.enterprise.stage views -->
+
+    <record id="agri_enterprise_stage_view_tree"
+            model="ir.ui.view">
+        <field name="name">agri.enterprise.stage.view.tree</field>
+        <field name="model">agri.enterprise.stage</field>
+        <field name="priority">10</field>
+        <field name="arch"
+               type="xml">
+            <tree string="Stages"
+                  editable="bottom">
+                <field name="sequence"
+                       widget="handle"/>
+                <field name="name"/>
+                <field name="stage_start"/>
+                <field name="stage_end"/>
+                <field name="enterprise_state"/>
+                <field name="fold"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--<record id="agri_enterprise_stage_view_form" model="ir.ui.view">
+        <field name="name">agri.enterprise.stage.view.form</field>
+        <field name="model">agri.enterprise.stage</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                <sheet>
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="fold" />
+                    <field name="enterprise_state" />
+                </sheet>
+            </form>
+        </field>
+    </record>-->
+
+</odoo>

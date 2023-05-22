@@ -1,0 +1,52 @@
+id,class_id,name,irrigated
+agri_land_use_1,1,Water,FALSE
+agri_land_use_6,6,Water (Seasonal),FALSE
+agri_land_use_9,9,Wetland,FALSE
+agri_land_use_12,12,Forest,FALSE
+agri_land_use_15,15,Erosion,FALSE
+agri_land_use_18,18,Bare,FALSE
+agri_land_use_21,21,River,FALSE
+agri_land_use_24,24,Ocean,FALSE
+agri_land_use_27,27,Wasteland,FALSE
+agri_land_use_30,30,Grazing,FALSE
+agri_land_use_33,33,Grazing (Shrubland),FALSE
+agri_land_use_36,36,Grazing (Bush),FALSE
+agri_land_use_39,39,Grazing (Fynbos),FALSE
+agri_land_use_42,42,Planted Pasture,FALSE
+agri_land_use_45,45,Planted Pasture (Irrigated),TRUE
+agri_land_use_48,48,Conservation,FALSE
+agri_land_use_60,60,Crop,FALSE
+agri_land_use_63,63,Crop (Irrigated),TRUE
+agri_land_use_66,66,Crop (Smallholding),FALSE
+agri_land_use_69,69,Crop (Subsistence),FALSE
+agri_land_use_72,72,Vegetable,FALSE
+agri_land_use_75,75,Horticulture,FALSE
+agri_land_use_78,78,Greenhouse,FALSE
+agri_land_use_90,90,Orchard,FALSE
+agri_land_use_93,93,Orchard (Shadenet),FALSE
+agri_land_use_96,96,Vineyard,FALSE
+agri_land_use_120,120,Sugarcane,FALSE
+agri_land_use_123,123,Sugarcane (Irrigated),TRUE
+agri_land_use_126,126,Sugarcane (Small-scale),FALSE
+agri_land_use_129,129,Pineapple,FALSE
+agri_land_use_132,132,Tea,FALSE
+agri_land_use_135,135,Tea (Irrigated),TRUE
+agri_land_use_150,150,Timber,FALSE
+agri_land_use_153,153,Timber (Smallholding),FALSE
+agri_land_use_180,180,Homestead,FALSE
+agri_land_use_183,183,Structure (Processing),FALSE
+agri_land_use_186,186,Structure (Storage),FALSE
+agri_land_use_189,189,Structure (Handling),FALSE
+agri_land_use_192,192,Utility,FALSE
+agri_land_use_195,195,Dam,FALSE
+agri_land_use_210,210,Mining,FALSE
+agri_land_use_213,213,Commercial,FALSE
+agri_land_use_216,216,Industrial,FALSE
+agri_land_use_219,219,Road & Rail,FALSE
+agri_land_use_222,222,Landfill,FALSE
+agri_land_use_225,225,Sewage Pond,FALSE
+agri_land_use_240,240,Residential,FALSE
+agri_land_use_243,243,Residential (Informal),FALSE
+agri_land_use_246,246,Village,FALSE
+agri_land_use_249,249,Residential (Smallholding),FALSE
+agri_land_use_252,252,Recreational,FALSE

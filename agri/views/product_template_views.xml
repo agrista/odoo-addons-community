@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- product.template views -->
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.form.inherit.agri.crop</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-block">
+                    <field name="is_cultivar"/>
+                    <label for="is_cultivar"/>
+                </span>
+                <span class="d-inline-block">
+                    <field name="is_agrochemical"/>
+                    <label for="is_agrochemical"/>
+                </span>
+                <span class="d-inline-block">
+                    <field name="is_fertiliser"/>
+                    <label for="is_fertiliser"/>
+                </span>
+            </xpath>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page string="Cultivar" name="cultivar" attrs="{'invisible': [('is_cultivar', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="leaves_per_plant"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Agrochemical" name="cultivar" attrs="{'invisible': [('is_agrochemical', '=', False)]}">
+                    <group>
+                        <field name="active_ingredient_ids" widget="many2many_tags"
+                               placeholder="Active ingredients..."/>
+                        <field name="related_product_category_ids" widget="many2many_tags"
+                               placeholder="Related enterprise..."/>
+                        <field name="pest_disease_ids" widget="many2many_tags" placeholder="Target pests/diseases..."/>
+                    </group>
+                </page>
+                <page string="Fertiliser" name="fertiliser" attrs="{'invisible': [('is_fertiliser', '=', False)]}">
+                    <group>
+                        <field name="nitrogen"/>
+                        <field name="phosphorus"/>
+                        <field name="potassium"/>
+                        <field name="fertiliser_grading_type"/>
+                        <field name="nutrient_concentration_ids"
+                               context="{'default_product_id': id}">
+                            <tree string="Nutrients">
+                                <field name="nutrient_id"/>
+                                <field name="concentration_perc"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_search_view" model="ir.ui.view">
+        <field name="name">product.template.search.inherit.agri.production</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="filter_to_purchase" position="after">
+                <filter string="Is Cultivar" name="filter_is_cultivar" domain="[('is_cultivar', '=', True)]"/>
+                <filter string="Is Agrochemical" name="filter_is_agrochemical"
+                        domain="[('is_agrochemical', '=', True)]"/>
+                <field name="active_ingredient_ids" string="Active Ingredients"
+                       filter_domain="[('active_ingredient_ids.name','ilike',self)]"/>
+                <field name="related_product_category_ids" string="Enterprises"
+                       filter_domain="[('related_product_category_ids.name','ilike',self)]"/>
+                <field name="pest_disease_ids" string="Pests/Diseases"
+                       filter_domain="[('pest_disease_ids.name','ilike',self)]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- actions -->
+
+    <record id="product_template_action"
+            model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('is_agri', '=', True)]</field>
+        <field name="context">{'default_is_agri': True}</field>
+        <field name="help"
+               type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new agri product
+            </p>
+        </field>
+    </record>
+
+    <record id="agri_cultivar_action" model="ir.actions.act_window">
+        <field name="name">Cultivars</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_filter_is_cultivar': 1,
+            'default_type': 'product',
+            'default_is_cultivar': 1
+        }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a cultivar
+            </p>
+        </field>
+    </record>
+
+    <record id="agri_agrochemical_action" model="ir.actions.act_window">
+        <field name="name">Agrochemicals</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_filter_is_agrochemical': 1,
+            'default_type': 'product',
+            'default_is_agrochemical': 1
+        }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an agrochemical
+            </p>
+        </field>
+    </record>
+
+    <record id="agri_fertiliser_action" model="ir.actions.act_window">
+        <field name="name">Fertilisers</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_filter_is_fertiliser': 1,
+            'default_type': 'product',
+            'default_is_fertiliser': 1
+        }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a fertiliser
+            </p>
+        </field>
+    </record>
+</odoo>
