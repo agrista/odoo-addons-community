@@ -3,9 +3,9 @@
 {
     "name": "Base Partner Company Group",
     "summary": "Adds the possibility to add a company group to a company",
-    "version": "15.0.1.1.0",
+    "version": "16.0.1.0.0",
     "category": "Sales",
-    "author": "Camptocamp SA, Odoo Community Association (OCA)",
+    "author": "Camptocamp, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "depends": ["base"],
     "website": "https://github.com/OCA/partner-contact",
