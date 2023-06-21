@@ -3,8 +3,8 @@
     'version': '1.1.0',
     'category': 'Generic Modules/Others',
     'license': 'Other proprietary',
-    'author': 'contagra',
-    'website': 'https://github.com/contagra/odoo-agri',
+    'author': 'Agrista',
+    'website': 'https://github.com/agrista/odoo-agri',
     'depends': ['stock', 'product_attribute_set'],
     'data': [
         # 'views/product_attribute_group.xml',
