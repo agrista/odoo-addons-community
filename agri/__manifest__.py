@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Part of Contagra. See LICENSE file for full copyright and licensing details.
+# Part of Agrista. See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Agri',
     'summary': 'Agriculture base module',
-    'website': 'https://github.com/contagra/odoo-agri',
+    'website': 'https://github.com/agrista/odoo-agri',
     'category': 'Operations/Inventory',
-    'version': '0.2.6',
+    'version': '0.2.7',
     'sequence': 1,
     'author': 'Contagra',
     'license': 'Other proprietary',
@@ -38,16 +38,16 @@
         'data/agri.pest.disease.csv',
         'data/res_company_data.xml',
         'data/res_country_data.xml',
+        'views/agri_active_ingredient_views.xml',
+        'views/agri_enterprise_views.xml',
+        'views/agri_nutrient_views.xml',
+        'views/agri_pest_disease_views.xml',
+        # 'views/agri_product_views.xml',
         'views/date_range_views.xml',
         'views/ir_attachment_views.xml',
         # 'views/product_template_views.xml',
         'views/product_views.xml',
         'views/res_config_settings_views.xml',
-        'views/agri_enterprise_views.xml',
-        'views/agri_active_ingredient_views.xml',
-        'views/agri_nutrient_views.xml',
-        'views/agri_pest_disease_views.xml',
-        'views/agri_product_views.xml',
         'views/uom_views.xml',
         'views/menus.xml',
     ],

@@ -9,5 +9,5 @@ class ResConfigSettings(models.TransientModel):
         string="Atlas URI",
         help="Contagra Atlas URI for point-in-polygon requests",
         config_parameter="agri.atlas_uri",
-        default="https://atlas.contagra.com",
+        default="https://atlas.agrista.com",
     )

@@ -13,7 +13,7 @@
     """,
     'author': 'Contagra',
     'license': 'AGPL-3',
-    'website': 'https://contagra.com/',
+    'website': 'https://agrista.com/',
     'data': [
         'views/purchase_views.xml',
     ],

@@ -4,7 +4,7 @@
 {
     'name': 'Agri Purchase Stock',
     'summary': 'Agriculture purchase stock module',
-    'website': 'https://github.com/contagra/odoo-agri',
+    'website': 'https://github.com/agrista/odoo-agri',
     'category': 'Operations/Inventory',
     'version': '0.1.0',
     'sequence': 1,
