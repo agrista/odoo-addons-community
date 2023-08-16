@@ -2,8 +2,8 @@
 
 from . import agri_active_ingredient
 from . import agri_agrochemical
-from . import agri_crop
 from . import agri_crop_potential
+from . import agri_cultivar
 from . import agri_document
 from . import agri_enterprise
 from . import agri_fertilizer

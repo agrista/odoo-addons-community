@@ -40,7 +40,7 @@
               sequence="40"/>-->
 
         <menuitem id="agri_nutrient_concentration_menu"
-              name="Nutrient Contrations"
+              name="Nutrient Concentrations"
               parent="agri_product_menu"
               sequence="50"
               action="agri_nutrient_concentration_action"

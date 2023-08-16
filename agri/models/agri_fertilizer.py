@@ -4,10 +4,10 @@ from odoo import fields, models, _
 class AgriFertilizer(models.Model):
     _name = 'agri.fertilizer'
     _description = 'Agri Fertilizer'
-    _inherits = {'product.template': 'product_id'}
+    _inherits = {'product.template': 'product_tmpl_id'}
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    product_id = fields.Many2one('product.template', string='Product Template', required=True, auto_join=True,
+    product_tmpl_id = fields.Many2one('product.template', string='Product Template', required=True, auto_join=True,
                                           ondelete='cascade', index=True, copy=False, )
     fertilizer_grading_type = fields.Selection(
         [

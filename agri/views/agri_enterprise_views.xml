@@ -34,7 +34,7 @@
                 <field name="name"/>
                 <field name="type"/>
                 <field name="calendar_period_type"/>
-                <field name="cycle"/>
+                <field name="cycles"/>
                 <field name="season_start"/>
                 <field name="season_end"/>
             </tree>
@@ -58,9 +58,10 @@
                         </h1>
                     </div>
                     <group>
+                        <field name="code"/>
                         <field name="type"/>
                         <field name="calendar_period_type"/>
-                        <field name="cycle"/>
+                        <field name="cycles"/>
                         <field name="season_start"/>
                         <field name="season_end"/>
                     </group>

@@ -7,6 +7,7 @@ class Enterprise(models.Model):
     _order = 'name asc'
 
     name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
     type = fields.Selection([('crop', 'Crop'),
                              ('permanent_crop', 'Permanent Crop'),
                              ('livestock', 'Livestock')],
@@ -15,7 +16,8 @@ class Enterprise(models.Model):
                             required=True)
     # Cycles are relevant for permanent crops, indicate the year from
     # establishment. Starts with one.
-    cycle = fields.Integer('Cycle', default=1)
+    cycles = fields.Integer('Cycles', default=1,
+                           help='Cycles are relevant for permanent crops, indicate the year from establishment.')
     calendar_period_type = fields.Many2one('date.range.type',
                                            string='Calendar Period Type',
                                            domain="[('is_calendar_period', '=', True)]",
