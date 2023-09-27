@@ -63,7 +63,7 @@ class ImportType(models.Model):
 
     name = fields.Char(required=True, help="A meaningful human-friendly name")
     description = fields.Text()
-    key = fields.Char(required=True, help="Unique mnemonic identifier")
+    key = fields.Char(required=True, help="Unique mnemonic identifier", copy=False)
     options = fields.Text(help="YAML configuration")
     use_job = fields.Boolean(
         help=(
@@ -100,6 +100,9 @@ class ImportType(models.Model):
 
     def available_importers(self):
         self.ensure_one()
+        if self.settings:
+            for item in self._legacy_available_importers():
+                yield item
         options = self._load_options()
         for line in options:
             is_last_importer = False
@@ -128,3 +131,9 @@ class ImportType(models.Model):
             "name": "importer.record",
         },
     }
+
+    def copy_data(self, default=None):
+        res = super().copy_data(default)
+        for data, rec in zip(res, self):
+            data["key"] = rec.key + "_COPY_FIXME"
+        return res

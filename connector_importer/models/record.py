@@ -94,20 +94,16 @@ class ImportRecord(models.Model):
         use_job = self.recordset_id.import_type_id.use_job
         if debug_mode:
             use_job = False
-        job_method = (
-            self.with_context(queue_job__no_delay=not use_job)
-            .with_delay()
-            .import_record
-        )
-        result = self._run_import(job_method, use_job)
+        result = self._run_import(use_job=use_job)
         return result
 
-    def _run_import(self, job_method, use_job):
+    def _run_import(self, use_job=True):
         res = {}
         # we create a record and a job for each model name
         # that needs to be imported
+        new_self = self.with_context(queue_job__no_delay=not use_job)
         for config in self.recordset_id.available_importers():
-            result = job_method(config)
+            result = new_self.with_delay().import_record(config)
             res[config.model] = result
             if self.debug_mode() or not use_job:
                 # debug mode, no job here: reset it!
