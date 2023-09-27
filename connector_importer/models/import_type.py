@@ -100,9 +100,6 @@ class ImportType(models.Model):
 
     def available_importers(self):
         self.ensure_one()
-        if self.settings:
-            for item in self._legacy_available_importers():
-                yield item
         options = self._load_options()
         for line in options:
             is_last_importer = False
