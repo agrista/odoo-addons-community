@@ -1,4 +1,5 @@
 # Copyright 2017 LasLabs Inc.
+# Copyright 2023 Tecnativa - Pedro M. Baeza
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 from odoo import api, fields, models
@@ -19,7 +20,6 @@ class MultiCompanyAbstract(models.AbstractModel):
     company_ids = fields.Many2many(
         string="Companies",
         comodel_name="res.company",
-        default=lambda self: self._default_company_ids(),
     )
     # TODO: Remove it following https://github.com/odoo/odoo/pull/81344
     no_company_ids = fields.Boolean(
@@ -38,16 +38,20 @@ class MultiCompanyAbstract(models.AbstractModel):
             else:
                 record.no_company_ids = True
 
-    def _default_company_ids(self):
-        return self.browse(self.env.company.ids)
-
     @api.depends("company_ids")
-    @api.depends_context("company")
+    @api.depends_context("company", "_check_company_source_id")
     def _compute_company_id(self):
         for record in self:
-            # Give the priority of the current company of the user to avoid
-            # multi company incompatibility errors.
-            company_id = self.env.context.get("force_company") or self.env.company.id
+            # Set this priority computing the company (if included in the allowed ones)
+            # for avoiding multi company incompatibility errors:
+            # - If this call is done from method _check_company, the company of the
+            #   record to be compared.
+            # - Otherwise, current company of the user.
+            company_id = (
+                self.env.context.get("_check_company_source_id")
+                or self.env.context.get("force_company")
+                or self.env.company.id
+            )
             if company_id in record.company_ids.ids:
                 record.company_id = company_id
             else:
@@ -78,11 +82,9 @@ class MultiCompanyAbstract(models.AbstractModel):
         return super().write(vals)
 
     @api.model
-    def _name_search(
-        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
-    ):
+    def _patch_company_domain(self, args):
         # In some situations the 'in' operator is used with company_id in a
-        # name_search. ORM does not convert to a proper WHERE clause when using
+        # name_search or search_read. ORM does not convert to a proper WHERE clause when using
         # the 'in' operator.
         # e.g: ```
         #     WHERE "res_partner"."id" in (SELECT "res_partner_id"
@@ -110,6 +112,13 @@ class MultiCompanyAbstract(models.AbstractModel):
                 new_args.extend(fix)
             else:
                 new_args.append(arg)
+        return new_args
+
+    @api.model
+    def _name_search(
+        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
+    ):
+        new_args = self._patch_company_domain(args)
         return super()._name_search(
             name,
             args=new_args,
@@ -117,3 +126,8 @@ class MultiCompanyAbstract(models.AbstractModel):
             limit=limit,
             name_get_uid=name_get_uid,
         )
+
+    @api.model
+    def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
+        new_domain = self._patch_company_domain(domain)
+        return super().search_read(new_domain, fields, offset, limit, order)
