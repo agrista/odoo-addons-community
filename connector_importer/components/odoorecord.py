@@ -92,7 +92,7 @@ class OdooRecordHandler(Component):
             xid = self._get_xmlid(values, orig_values)
             item = self.env.ref(xid, raise_if_not_found=False)
             return item or self.model
-        item = self.model.search(
+        item = self.model.sudo().search(
             self.odoo_find_domain(values, orig_values),
             order="create_date desc",
             limit=1,
