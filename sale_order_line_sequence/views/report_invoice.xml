@@ -9,7 +9,7 @@
             <th
                 t-if="(o.move_type == 'out_invoice' or o.move_type == 'out_refund') and any(l.related_so_sequence for l in o.invoice_line_ids)"
             >
-                Line Number
+                #
             </th>
         </xpath>
         <!--complicated expr to be compatible with other modules-->
