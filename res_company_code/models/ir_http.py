@@ -19,7 +19,7 @@ class Http(models.AbstractModel):
 
         # 1. Replace company name by company complete name in the session
         #    The values are used in the switch_company_menu widget (web module)
-        # 2. Recompute sequence. (as the widget hardcod the order by sequence). See :
+        # 2. Recompute sequence. (as the widget hard-codes the order by sequence). See :
         #    https://github.com/odoo/odoo/blob/fbd6a3bc10a3302e7061eb46eb246221e461e76d/addons/web/static/src/webclient/switch_company_menu/switch_company_menu.xml#L10  # noqa: B950
         if display_switch_company_menu:
             for sequence, company in enumerate(user.company_ids):
